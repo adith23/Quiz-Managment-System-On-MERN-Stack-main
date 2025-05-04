@@ -1,0 +1,40 @@
+.navibar2_component {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 100px;
+  font-family: "Poppins";
+  background-color: #31304D;
+}
+
+.navibar_align {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
+.collapse_icon {
+  height: 20px;
+  width: auto;
+}
+
+.navibar2_logo {
+  height: 30px;
+  width: auto;
+}
+
+.navibar2_icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 20px;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+}

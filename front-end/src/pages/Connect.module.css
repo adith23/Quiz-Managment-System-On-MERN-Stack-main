@@ -1,0 +1,299 @@
+.Connect_page {
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins";
+  position: relative;
+}
+
+.Connect_page_div {
+  background-color: #161a30;
+  width: 100%;
+  height: 100%;
+}
+
+.maintitle_text {
+  color: #f9db24;
+  font-family: Helvetica;
+  font-size: 35px;
+  font-weight: 600;
+  left: 205px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 50px;
+  white-space: nowrap;
+}
+
+.search_bar {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  padding-top: 140px;
+  padding-bottom: 70px;
+}
+
+.search_section {
+  display: flex;
+  flex-direction: row;
+}
+
+.search_box {
+  margin-top: -90px;
+  margin-left: 725px;
+  padding-right: 10px;
+  padding-left: 20px;
+  color: #ffffff;
+  border-radius: 20px;
+  background-color: #161a30;
+  border: 2px solid #fdd017;
+  width: 300px;
+  height: 39px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.search_box::placeholder {
+  color: #cacaca;
+}
+
+.search_button {
+  height: 39px;
+  margin-top: -89px;
+  margin-left: 7px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #161a30;
+  border: 2px solid #fdd017;
+  color: #ffff;
+  cursor: pointer;
+}
+
+.search_button:hover {
+  background-color: #fdd017;
+  color: #000000;
+}
+
+.connect_section {
+  margin-top: -25px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.connect_section_style {
+  background-color: #31304d;
+  border-radius: 30px;
+  width: 1050px;
+  min-height: fit-content;
+  padding: 30px;
+}
+
+.topic_text {
+  margin-top: 5px;
+  margin-left: 35px;
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+
+.topic_text2 {
+  margin-top: 58px;
+  margin-left: 37px;
+  color: #ffff;
+  font-size: 19px;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.followedplayers {
+  margin-top: -87px;
+  margin-left: 380px;
+  margin-bottom: 80px;
+}
+
+.followedplayers_button {
+  font-weight: bold;
+  font-size: 25px;
+  background-color: #f9db24;
+  border-radius: 50px;
+  box-shadow: 0px 4px 4px #00000040;
+  box-sizing: border-box;
+  height: 50px;
+  overflow: hidden;
+  width: 250px;
+}
+
+.followedplayers_button:hover {
+  background-color: #00000040;
+  color: #f9db24;
+}
+
+.users_section_wrap {
+  flex-direction: column;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 30px;
+}
+
+.users_box {
+  margin-left: 35px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 980px;
+}
+
+.users_bodx_bar:hover {
+  background-color: #fdd017;
+  color: #000000;
+}
+
+.users_box_bar {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  position: absolute;
+  bottom: 10px;
+  height: 50px;
+  width: 980px;
+  background-color: transparent;
+  border-radius: 15px;
+  border: 2px solid #d0d0d0;
+}
+
+.users_name {
+  margin-left: 35px;
+  position: absolute;
+  font-size: 22px;
+  font-weight: 500;
+  color: #e3e3e3;
+  top: 12px;
+}
+
+.seeact_button {
+  top: 14px;
+  color: #e3e3e3;
+  font-size: 20px;
+  font-weight: 400;
+  left: 395px;
+  border: none;
+  background-color: transparent;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-decoration: underline;
+}
+
+.follow_button {
+  top: 8px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  right: 60px;
+  background-color: #fdd017;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  border-radius: 15px;
+  padding: 5px 15px 5px 15px;
+}
+
+.unfollow_button {
+  top: 8px;
+  color: #fdd017;
+  font-size: 20px;
+  font-weight: bold;
+  right: 49px;
+  background-color: #000000;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  border-radius: 15px;
+  padding: 5px 15px 5px 15px;
+}
+
+.question_count {
+  margin-left: 25px;
+  position: absolute;
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+  top: 45px;
+}
+
+/* Modal container */
+.a_modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal content */
+.a_modal_content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  background-color: #f9db24;
+  border-radius: 25px;
+  width: 520px;
+  height: 420px;
+  /* You can set a max-width */
+}
+
+.a_modal_stylediv {
+  align-items: start;
+  margin-top: -320px; /* Add space between paragraph and buttons */
+  margin-bottom: 40px;
+  margin-left: 50px;
+}
+
+/* Close button */
+.a_modal_button {
+  font-family: "Poppins", Helvetica;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-bottom: 343px;
+  margin-left: 448px;
+  border-radius: 8px;
+  border-width: 1px;
+  background-color: #d7d7d7;
+  color: #000000;
+  cursor: pointer;
+}
+
+/* Modal content paragraphs */
+.a_modal_title {
+  font-weight: bold;
+  font-family: "Poppins", Helvetica;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.a_modal_para {
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 10px; /* Add space between paragraph and buttons */
+}

@@ -1,0 +1,63 @@
+.navibar_box {
+  display: flex;
+  flex-direction: row;
+  height: 8dvh;
+  padding: 0px 40px;
+  background-color: #0e1127;
+  justify-content: space-between;
+  font-family: "Poppins";
+}
+
+.logo {
+  display: flex;
+
+  align-items: center;
+}
+
+.navibar_logo {
+  width: 200px;
+}
+
+.navibar_text {
+  display: flex;
+  flex-direction: row;
+}
+
+.text_align {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  place-items: center;
+  gap: 40px;
+}
+
+.help_text {
+  color: #ADB7BC;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.help_text:hover {
+  color: #F9DB24;
+}
+
+.contact_section {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.contact_text {
+  color: #ADB7BC;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.contact_text:hover {
+  color: #F9DB24
+}

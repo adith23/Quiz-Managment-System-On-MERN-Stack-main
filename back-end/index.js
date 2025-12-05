@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const http = require("http");
 const socketIo = require("socket.io");
 const app = express();
-const Session = require("./models/sessionModel");
+const Session = require("./src/models/sessionModel");
 
 // Database Connection
 mongoose
@@ -21,11 +21,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.use("/", require("./routes/authRoutes"));
-app.use("/", require("./routes/quizRoutes"));
-app.use("/", require("./routes/sessionRoutes")); // Include session routes
-app.use("/", require("./routes/savedquizRoutes")); // Include session routes
-app.use("/", require("./routes/ActivityRoutes")); // Add this line
+app.use("/", require("./src/routes/authRoutes"));
+app.use("/", require("./src/routes/quizRoutes"));
+app.use("/", require("./src/routes/sessionRoutes")); // Include session routes
+app.use("/", require("./src/routes/savedQuizRoutes")); // Include session routes
+app.use("/", require("./src/routes/ActivityRoutes")); // Add this line
 
 const PORT = process.env.PORT || 8000; // Use process.env.PORT for dynamic port binding
 const server = http.createServer(app);

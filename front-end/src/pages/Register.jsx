@@ -1,4 +1,4 @@
-import axios from "axios";
+import { registerUser } from "../services/authService";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -16,21 +16,21 @@ export default function Register() {
     password: "",
   });
 
-  const registerUser = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     const { name, email, mobile, password } = data;
 
     try {
-      const data = await axios.post("/register", {
+      const response = await registerUser({
         name,
         email,
         mobile,
         password,
       });
 
-      if (data.error) {
-        toast.error(data.error);
+      if (response.error) {
+        toast.error(response.error);
       } else {
         setData({
           name: "",
@@ -53,7 +53,7 @@ export default function Register() {
       <div className={RegisterCSS.r_page}>
         <div className={RegisterCSS.register_box}>
           <h1 className={RegisterCSS.register_page_name}>SIGN</h1>
-          <form onSubmit={registerUser} className={RegisterCSS.reg_form}>
+          <form onSubmit={handleRegister} className={RegisterCSS.reg_form}>
             <div className={RegisterCSS.reg_input_box}>
               <label className={RegisterCSS.reg_lable}>name</label>
               <input

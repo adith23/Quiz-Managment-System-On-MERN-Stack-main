@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { loginUser } from "../services/authService";
 import LoginCSS from "./Login.module.css";
 import Navibar from "../component/Navbar";
 import Footer from "../component/Footer";
@@ -14,19 +14,19 @@ export default function Login() {
     password: "",
   });
 
-  const loginUser = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const { email, password } = data;
     try {
-      const { data } = await axios.post("/login", {
+      const responseData = await loginUser({
         email,
         password,
       });
-      if (data.error) {
-        toast.error(data.error);
+      if (responseData.error) {
+        toast.error(responseData.error);
       } else {
         // Store token in local storage
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", responseData.token);
         setData({});
         navigate("/CreateAndPlay");
         toast.success("🎊Login Successful. Welcome Back!🎈");
@@ -41,7 +41,7 @@ export default function Login() {
       <Navibar />
       <div className={LoginCSS.login_page}>
         <h1 className={LoginCSS.page_name}>LOGIN</h1>
-        <form onSubmit={loginUser} className={LoginCSS.login_form}>
+        <form onSubmit={handleLogin} className={LoginCSS.login_form}>
           <div className={LoginCSS.text_box}>
             <label>email</label>
             <input

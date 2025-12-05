@@ -2,8 +2,9 @@ import Slider from "../component/Slider";
 import Style from "./Home.module.css";
 import React, { useState, useEffect } from "react";
 import Quizzes from "../component/Quizzes";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getAllQuizzes, getSessionDetails } from "../services/quizService";
+import { getAllUsers } from "../services/userService";
 
 function Home() {
   const [quizzes, setQuizzes] = useState([]);
@@ -15,11 +16,7 @@ function Home() {
   useEffect(() => {
     const fetchUserQuizzes = async () => {
       try {
-        const response = await fetch("http://localhost:8000/quizzes");
-        if (!response.ok) {
-          throw new Error("Failed to fetch quizzes");
-        }
-        const quizzesData = await response.json();
+        const quizzesData = await getAllQuizzes();
         setQuizzes(quizzesData);
       } catch (error) {
         console.error("Error fetching quizzes:", error.message);
@@ -28,9 +25,8 @@ function Home() {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/users"); // Replace with your server's route
-        setUsers(response.data);
-        console.log(response);
+        const usersData = await getAllUsers();
+        setUsers(usersData);
       } catch (error) {
         console.error(error);
       }
@@ -43,13 +39,7 @@ function Home() {
   useEffect(() => {
     const fetchSessionDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/sessions/${310255}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await getSessionDetails(310255);
         setSession(data.session);
       } catch (error) {
         console.error("Error fetching session details:", error.message);

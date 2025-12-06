@@ -1,10 +1,10 @@
 //QuizCreatePage.jsx
-import { useState, useEffect } from "react";
-import Navibar2 from "../component/Navibar2";
-import Footer from "../component/Footer";
+import { useState } from "react";
+import Navibar2 from "../components/layout/Navibar2";
+import Footer from "../components/layout/Footer";
 import Style from "./QuizCreatePage.module.css";
-import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const QuizCreatePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +13,7 @@ const QuizCreatePage = () => {
   ]);
   const [timeLimit, setTimeLimit] = useState({ minutes: 0, seconds: 0 });
   const [title, setTitle] = useState("");
-  const [createdQuizzes, setCreatedQuizzes] = useState([]);
+
   const [numQuestions, setNumQuestions] = useState(1);
   const [category, setCategory] = useState(""); // Add this line
   const navigate = useNavigate();
@@ -69,25 +69,16 @@ const QuizCreatePage = () => {
 
   const saveQuiz = async () => {
     try {
-      // Retrieve JWT token from local storage
-      const token = localStorage.getItem("token");
-      console.log("Token:", token);
-
-      // Send JWT token in the request headers
-      const res = await fetch("http://localhost:8000/quizzes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include JWT token in the headers
-        },
-        body: JSON.stringify({ title, questions, timeLimit, category }), // Include category here
+      const { data } = await api.post("/quizzes", {
+        title,
+        questions,
+        timeLimit,
+        category,
       });
 
-      const data = await res.json();
       console.log("Quiz saved successfully:", data);
 
-      // Update state to include new quiz
-      setCreatedQuizzes((prevQuizzes) => [...prevQuizzes, data]);
+
 
       // Clear input fields and reset state for the next quiz creation
       setTitle("");

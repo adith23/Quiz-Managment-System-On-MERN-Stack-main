@@ -1,16 +1,16 @@
-// CreateAndPlay.js
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./CreateAndPlay.css";
-import Navibar2 from "../component/Navibar2";
-import socket from "./socket";
-import mathImg from "../../public/maths.png";
-import technologyImg from "../../public/technology.png";
-import scienceImg from "../../public/science.png";
-import historyImg from "../../public/history.png";
-import businessImg from "../../public/business.png";
-import financeImg from "../../public/finance.png";
-import defaultImg from "../../public/maths.png";
+import Navibar2 from "../components/layout/Navibar2";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+
+const mathImg = "/maths.png";
+const technologyImg = "/technology.png";
+const scienceImg = "/science.png";
+const historyImg = "/history.png";
+const businessImg = "/business.png";
+const financeImg = "/finance.png";
+const defaultImg = "/maths.png";
 
 const CreateAndPlay = () => {
   const [createdQuizzes, setCreatedQuizzes] = useState([]);
@@ -21,21 +21,16 @@ const CreateAndPlay = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const fetchCreatedQuizzes = async () => {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/user", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming 'token' is the key for the JWT token in local storage
-          },
-        });
-        const data = await response.json();
+        const { data } = await api.get("/quizzes/user");
         setCreatedQuizzes(data);
       } catch (error) {
         console.error("Error fetching quizzes:", error.message);
       }
     };
 
-    fetchQuizzes();
+    fetchCreatedQuizzes();
   }, []);
 
   const handleQuizCardClick = (quiz) => {
@@ -43,32 +38,22 @@ const CreateAndPlay = () => {
     setIsModalOpen(true);
   };
 
-  const handlePlayQuiz = (_quizId) => {
+  const handlePlayQuiz = () => {
     setIsPlayModalOpen(true);
   };
 
   const handleJoinQuiz = (gamePin) => {
-    console.log("Game Pin:", gamePin); // Log the game pin
-    // Fetch session details using the gamePin (session ID)
+    console.log("Game Pin:", gamePin);
     fetchSessionDetails(gamePin);
   };
 
   const fetchSessionDetails = async (gamePin) => {
-    console.log("Fetching session details for game pin:", gamePin); // Log before fetching session details
+    console.log("Fetching session details for game pin:", gamePin);
     try {
-      const response = await fetch(`http://localhost:8000/sessions/${gamePin}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const { data } = await api.get(`/sessions/${gamePin}`);
+
       const quizId = data.session.hostedQuizId._id;
       console.log("QuizId:", quizId);
-      // Navigate to PlayersLandingPage with quizId and gamePin
-      console.log(
-        "Navigating to PlayersLandingPage with QuizId and GamePin:",
-        quizId,
-        gamePin
-      ); // Log before navigating
       navigate(`/playerslanding/${quizId}/${gamePin}`);
     } catch (error) {
       console.error("Error fetching session details:", error.message);
@@ -80,7 +65,6 @@ const CreateAndPlay = () => {
     const quiz = createdQuizzes.find((q) => q._id === quizId);
     console.log("Quiz:", quiz);
 
-    // Always generate a new game pin when hosting a quiz
     const gamePin = Math.floor(100000 + Math.random() * 900000);
     console.log("Generated Pin:", gamePin);
 
@@ -89,10 +73,7 @@ const CreateAndPlay = () => {
 
   const handleDeleteQuiz = async (quizId) => {
     try {
-      const response = await fetch(`http://localhost:8000/quizzes/${quizId}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
+      const { data } = await api.delete(`/quizzes/${quizId}`);
       console.log(data.message);
       setIsDeleteModalOpen(false);
       setIsModalOpen(false);
@@ -105,9 +86,8 @@ const CreateAndPlay = () => {
     }
   };
 
-  // Function to handle navigation to QuizCreatePage
   const navigateToQuizCreatePage = () => {
-    navigate("/quizcreatepage/"); // Path to QuizCreatePage
+    navigate("/quizcreatepage/");
   };
 
   const getCategoryImage = (category) => {
@@ -125,7 +105,7 @@ const CreateAndPlay = () => {
       case "Finance":
         return financeImg;
       default:
-        return defaultImg; // Replace 'defaultImg' with the path to your default image
+        return defaultImg;
     }
   };
 
@@ -192,7 +172,6 @@ const CreateAndPlay = () => {
                 <button onClick={() => setIsDeleteModalOpen(true)}>
                   Delete Quiz
                 </button>{" "}
-                {/* Open delete confirmation modal */}
               </div>
             </div>
           )}

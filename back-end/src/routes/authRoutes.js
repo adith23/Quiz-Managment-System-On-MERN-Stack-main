@@ -6,6 +6,8 @@ const {
   registerUser,
   test,
   loginUser,
+  refresh,
+  logout,
 } = require("../controllers/authControllers");
 const User = require("../models/userModel");
 const FollowedUser = require("../models/followedUserModel");
@@ -25,6 +27,8 @@ router.get("/", test);
 router.post("/register", registerUser);
 
 router.post("/login", loginUser);
+router.post("/refresh", refresh);
+router.post("/logout", logout);
 
 router.get("/users", async (req, res) => {
   try {

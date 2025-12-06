@@ -1,6 +1,6 @@
 import MainCSS from "./Welcome.module.css";
-import Navibar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navibar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 export default function Welcome() {
   return (

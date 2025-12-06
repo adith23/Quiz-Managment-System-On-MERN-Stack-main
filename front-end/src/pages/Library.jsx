@@ -1,11 +1,11 @@
 //Library.jsx
-import Navibar2 from "../component/Navibar2";
-import Footer from "../component/Footer";
+import Navibar2 from "../components/layout/Navibar2";
+import Footer from "../components/layout/Footer";
 import Style from "./Library.module.css";
 import React, { useState, useEffect } from "react";
-import Quizzes from "../component/Quizzes";
-import SavedQuizzes from "../component/SavedQuizzes";
-import SearchQuizzes from "../component/SearchQuizzes";
+import Quizzes from "../components/common/Quizzes";
+import SavedQuizzes from "../components/common/SavedQuizzes";
+import SearchQuizzes from "../components/common/SearchQuizzes";
 
 function Library() {
   const [activeComponent, setActiveComponent] = useState("Quizzes");

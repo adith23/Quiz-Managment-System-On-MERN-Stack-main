@@ -1,8 +1,9 @@
 //Analytics.jsx
-import Navibar2 from "../component/Navibar2";
-import Footer from "../component/Footer";
+import Navibar2 from "../components/layout/Navibar2";
+import Footer from "../components/layout/Footer";
 import Style from "./Analytics.module.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import api from "../services/api";
 
 function Analytics() {
   const [quizzes, setQuizzes] = useState([]);
@@ -30,41 +31,32 @@ function Analytics() {
   useEffect(() => {
     const fetchUserQuizzes = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/quizzes`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // replace `token` with the actual token
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch user quizzes");
-        }
-        const quizzesData = await response.json();
-        setQuizzes(quizzesData);
+        const { data } = await api.get("/quizzes/user");
+        setQuizzes(data);
 
         // Fetch sessions for each quiz
-        for (const quiz of quizzesData) {
+        for (const quiz of data) {
           console.log(quiz);
-          const sessionResponse = await fetch(
-            `http://localhost:8000/sessions/quiz/${quiz._id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`, // replace `token` with the actual token
-              },
-            }
-          );
-          if (!sessionResponse.ok) {
-            throw new Error("Failed to fetch sessions");
+          try {
+            const sessionResponse = await api.get(
+              `/sessions/quiz/${quiz._id}`
+            );
+            const sessionData = sessionResponse.data;
+            console.log(sessionData);
+            setSessions((prevSessions) => [
+              ...prevSessions,
+              ...sessionData.sessions.map((session) => ({
+                ...session,
+                quizTitle: quiz.title,
+                questionCount: quiz.questions.length,
+              })),
+            ]); // Add this line
+          } catch (sessionError) {
+            console.error(
+              `Error fetching sessions for quiz ${quiz._id}:`,
+              sessionError.message
+            );
           }
-          const sessionData = await sessionResponse.json();
-          console.log(sessionData);
-          setSessions((prevSessions) => [
-            ...prevSessions,
-            ...sessionData.sessions.map((session) => ({
-              ...session,
-              quizTitle: quiz.title,
-              questionCount: quiz.questions.length,
-            })),
-          ]); // Add this line
         }
       } catch (error) {
         console.error("Error fetching user quizzes:", error.message);

@@ -1,9 +1,10 @@
 //PlayersLandingPage.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./PlayersLandingPage.css";
-import Navibar2 from "../component/Navibar2";
+import Navibar2 from "../components/layout/Navibar2";
 import { useNavigate } from "react-router-dom";
 import socket from "./socket";
+import api from "../services/api";
 
 const PlayersLandingPage = () => {
   const navigate = useNavigate();
@@ -73,13 +74,7 @@ const PlayersLandingPage = () => {
     // Fetch session details using session ID (game pin)
     const fetchSessionDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/sessions/${sessionId}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.get(`/sessions/${sessionId}`);
         setSession(data.session);
         console.log("Session Details:", data.session);
         // Extract quizId from session and set it

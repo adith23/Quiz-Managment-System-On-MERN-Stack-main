@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import "./SearchQuizzes.css";
 import { useNavigate } from "react-router-dom";
-import Navibar2 from "./Navibar2";
-import mathImg from "../../public/maths.png";
-import technologyImg from "../../public/technology.png";
-import scienceImg from "../../public/science.png";
-import historyImg from "../../public/history.png";
-import businessImg from "../../public/business.png";
-import financeImg from "../../public/finance.png";
-import defaultImg from "../../public/maths.png";
+import Navibar2 from "../layout/Navibar2";
+
+const mathImg = "/maths.png";
+const technologyImg = "/technology.png";
+const scienceImg = "/science.png";
+const historyImg = "/history.png";
+const businessImg = "/business.png";
+const financeImg = "/finance.png";
+const defaultImg = "/maths.png";
 
 const SearchQuizzes = (props) => {
   const [createdQuizzes, setCreatedQuizzes] = useState([]);

@@ -1,6 +1,6 @@
 import Style from "./Profile.module.css";
-import Navibar2 from "../component/Navibar2";
-import Footer from "../component/Footer";
+import Navibar2 from "../components/layout/Navibar2";
+import Footer from "../components/layout/Footer";
 
 function Profile() {
   return (

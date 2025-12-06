@@ -1,9 +1,9 @@
 // Connect.jsx
-import Navibar2 from "../component/Navibar2";
-import Footer from "../component/Footer";
+import Navibar2 from "../components/layout/Navibar2";
+import Footer from "../components/layout/Footer";
 import Style from "./Connect.module.css";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import api from "../services/api";
+import { useState, useEffect } from "react";
 
 function Connect() {
   const [quizzes, setQuizzes] = useState([]);
@@ -17,8 +17,8 @@ function Connect() {
   const openModal = async (user) => {
     setCurrentusers(user);
     try {
-      const response = await axios.get(`/activities/${user._id}`);
-      setUserActivities(response.data.activities);
+      const { data } = await api.get(`/activities/${user._id}`);
+      setUserActivities(data.activities);
     } catch (error) {
       console.error(error);
     }
@@ -38,9 +38,9 @@ function Connect() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/users"); // Replace with your server's route
-        setusers(response.data);
-        console.log(response);
+        const { data } = await api.get("/users"); // Replace with your server's route
+        setusers(data);
+        console.log("Users fetched:", data);
       } catch (error) {
         console.error(error);
       }
@@ -48,13 +48,8 @@ function Connect() {
 
     const fetchFollowedUsers = async () => {
       try {
-        const token = localStorage.getItem("token"); // Get the token from local storage
-        const response = await axios.get("/followedUsers", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-          },
-        });
-        setFollowedUsers(response.data.followedUsers);
+        const { data } = await api.get("/followedUsers");
+        setFollowedUsers(data.followedUsers);
       } catch (error) {
         console.error(error);
       }
@@ -67,19 +62,10 @@ function Connect() {
   // Add these lines in your Connect.jsx file
   const handleFollow = async (userIdToFollow) => {
     try {
-      const token = localStorage.getItem("token"); // Get the token from local storage
-      const response = await axios.post(
-        "/follow",
-        {
-          followedUserId: userIdToFollow,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-          },
-        }
-      );
-      console.log("Successfully Followed:", response.data);
+      const { data } = await api.post("/follow", {
+        followedUserId: userIdToFollow,
+      });
+      console.log("Successfully Followed:", data);
       setFollowedUsers([...followedUsers, userIdToFollow]); // Add this line
     } catch (error) {
       console.error(error);
@@ -88,19 +74,10 @@ function Connect() {
 
   const handleUnfollow = async (userIdToUnfollow) => {
     try {
-      const token = localStorage.getItem("token"); // Get the token from local storage
-      const response = await axios.post(
-        "/unfollow",
-        {
-          unfollowedUserId: userIdToUnfollow,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-          },
-        }
-      );
-      console.log("Successfully Unfollowed:", response.data);
+      const { data } = await api.post("/unfollow", {
+        unfollowedUserId: userIdToUnfollow,
+      });
+      console.log("Successfully Unfollowed:", data);
       setFollowedUsers(followedUsers.filter((id) => id !== userIdToUnfollow)); // Add this line
     } catch (error) {
       console.error(error);
@@ -109,8 +86,8 @@ function Connect() {
 
   const handleDeleteAllActivities = async (userId) => {
     try {
-      const response = await axios.delete(`/activities/${userId}`);
-      console.log("Successfully deleted all activities:", response.data);
+      const { data } = await api.delete(`/activities/${userId}`);
+      console.log("Successfully deleted all activities:", data);
       setUserActivities([]);
     } catch (error) {
       console.error(error);
@@ -186,7 +163,7 @@ function Connect() {
                       <div>
                         <div className={Style.a_modal_stylediv}>
                           <div className={Style.a_modal_title}>
-                            <h2>{currentusers.name}'s Activities</h2>
+                            <h2>{currentusers.name}&apos;s Activities</h2>
                           </div>
                           {userActivities.map((activity, index) => (
                             <div className={Style.a_modal_para} key={index}>

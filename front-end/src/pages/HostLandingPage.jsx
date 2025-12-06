@@ -1,11 +1,12 @@
 //HostLandingPage.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./HostLandingPage.css";
-import Navibar2 from "../component/Navibar2";
+import Navibar2 from "../components/layout/Navibar2";
 //import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import socket from "./socket"; // Import the socket instance
+import api from "../services/api";
 
 const HostLandingPage = () => {
   const navigate = useNavigate();
@@ -18,11 +19,7 @@ const HostLandingPage = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/quizzes/${quizId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.get(`/quizzes/${quizId}`);
         setQuiz(data);
       } catch (error) {
         console.error("Error fetching quiz:", error.message);
@@ -48,21 +45,10 @@ const HostLandingPage = () => {
       // Function to update session in the backend
       const updateSession = async (playerId) => {
         try {
-          const response = await fetch("http://localhost:8000/sessions", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming 'token' is the key for the JWT token in local storage
-            },
-            body: JSON.stringify({
-              sessionId: gamePin,
-              playerId: playerId,
-            }),
+          const { data } = await api.put("/sessions", {
+            sessionId: gamePin,
+            playerId: playerId,
           });
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
           console.log("Session updated:", data.session);
         } catch (error) {
           console.error("Error updating session:", error.message);
@@ -96,18 +82,7 @@ const HostLandingPage = () => {
     // Post the new session to the back-end
     const postSession = async () => {
       try {
-        const response = await fetch("http://localhost:8000/sessions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming 'token' is the key for the JWT token in local storage
-          },
-          body: JSON.stringify(session),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.post("/sessions", session);
         console.log("Session created:", data.session);
       } catch (error) {
         console.error("Error creating session:", error.message);

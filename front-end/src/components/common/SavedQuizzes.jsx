@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./SavedQuizzes.css";
 import { useNavigate } from "react-router-dom";
-import Navibar2 from "../layout/Navibar2";
-import mathImg from "../../public/maths.png";
-import technologyImg from "../../public/technology.png";
-import scienceImg from "../../public/science.png";
-import historyImg from "../../public/history.png";
-import businessImg from "../../public/business.png";
-import financeImg from "../../public/finance.png";
-import defaultImg from "../../public/maths.png";
+import api from "../../services/api";
+
+const mathImg = "/maths.png";
+const technologyImg = "/technology.png";
+const scienceImg = "/science.png";
+const historyImg = "/history.png";
+const businessImg = "/business.png";
+const financeImg = "/finance.png";
+const defaultImg = "/maths.png";
 
 const SavedQuizzes = () => {
   const [createdQuizzes, setCreatedQuizzes] = useState([]);
@@ -21,29 +22,16 @@ const SavedQuizzes = () => {
   useEffect(() => {
     const fetchSavedQuizzes = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/savedQuizzes`, // No userId in the URL
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Add this line
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.get('/savedQuizzes');
         console.log("Fetched saved quizzes:", data.quizzes); // Log fetched quizzes
 
         // Fetch the quiz objects for the saved quiz IDs
         const quizResponses = await Promise.all(
           data.quizzes.map((quizId) =>
-            fetch(`http://localhost:8000/quizzes/${quizId}`)
+            api.get(`/quizzes/${quizId}`)
           )
         );
-        const quizData = await Promise.all(
-          quizResponses.map((res) => res.json())
-        );
+        const quizData = quizResponses.map((res) => res.data);
 
         setCreatedQuizzes(quizData); // Set the quizzes state
       } catch (error) {
@@ -59,7 +47,7 @@ const SavedQuizzes = () => {
     setIsModalOpen(true);
   };
 
-  const handlePlayQuiz = (_quizId) => {
+  const handlePlayQuiz = () => {
     setIsPlayModalOpen(true);
   };
 
@@ -72,11 +60,8 @@ const SavedQuizzes = () => {
   const fetchSessionDetails = async (gamePin) => {
     console.log("Fetching session details for game pin:", gamePin); // Log before fetching session details
     try {
-      const response = await fetch(`http://localhost:8000/sessions/${gamePin}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const { data } = await api.get(`/sessions/${gamePin}`);
+  
       const quizId = data.session.hostedQuizId._id;
       console.log("QuizId:", quizId);
       // Navigate to PlayersLandingPage with quizId and gamePin
@@ -106,16 +91,7 @@ const SavedQuizzes = () => {
   const handleDeleteQuiz = async (quizId) => {
     try {
       // Delete the quiz from the database
-      const response = await fetch(
-        `http://localhost:8000/savedQuizzes/${quizId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      const data = await response.json();
+      const { data } = await api.delete(`/savedQuizzes/${quizId}`);
       console.log(data.message);
 
       // Delete the quiz from the state
@@ -188,9 +164,7 @@ const SavedQuizzes = () => {
                 <button onClick={() => handlePlayQuiz(selectedQuiz._id)}>
                   Play Quiz
                 </button>
-                <button onClick={() => handleSave(selectedQuiz._id)}>
-                  Save to Library
-                </button>
+
                 <button onClick={() => setIsDeleteModalOpen(true)}>
                   Delete Saved Quiz
                 </button>{" "}

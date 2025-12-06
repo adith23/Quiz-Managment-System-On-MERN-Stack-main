@@ -1,28 +1,19 @@
-import Slider from "../component/Slider";
+import Slider from "../components/common/Slider";
+import Navibar2 from "../components/layout/Navibar2";
 import Style from "./Home.module.css";
-import React, { useState, useEffect } from "react";
-import Quizzes from "../component/Quizzes";
+import { useState, useEffect } from "react";
+import Quizzes from "../components/common/Quizzes";
 import { useNavigate } from "react-router-dom";
-import { getAllQuizzes, getSessionDetails } from "../services/quizService";
+import { getSessionDetails } from "../services/quizService";
 import { getAllUsers } from "../services/userService";
 
 function Home() {
-  const [quizzes, setQuizzes] = useState([]);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
 
-  // Fetch All the Quizzes
+  // Fetch Users
   useEffect(() => {
-    const fetchUserQuizzes = async () => {
-      try {
-        const quizzesData = await getAllQuizzes();
-        setQuizzes(quizzesData);
-      } catch (error) {
-        console.error("Error fetching quizzes:", error.message);
-      }
-    };
-
     const fetchUsers = async () => {
       try {
         const usersData = await getAllUsers();
@@ -33,7 +24,6 @@ function Home() {
     };
 
     fetchUsers();
-    fetchUserQuizzes();
   }, []);
 
   useEffect(() => {
@@ -56,6 +46,7 @@ function Home() {
 
   return (
     <div>
+      <Navibar2 />
       <div className={Style.home_page}>
         <div className={Style.slider}>
           <Slider className={Style.slider} />

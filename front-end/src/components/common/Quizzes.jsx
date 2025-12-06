@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Quizzes.css";
 import { useNavigate } from "react-router-dom";
-import Navibar2 from "./Navibar2";
-import mathImg from "../../public/maths.png";
-import technologyImg from "../../public/technology.png";
-import scienceImg from "../../public/science.png";
-import historyImg from "../../public/history.png";
-import businessImg from "../../public/business.png";
-import financeImg from "../../public/finance.png";
-import defaultImg from "../../public/maths.png";
+import api from "../../services/api";
+
+const mathImg = "/maths.png";
+const technologyImg = "/technology.png";
+const scienceImg = "/science.png";
+const historyImg = "/history.png";
+const businessImg = "/business.png";
+const financeImg = "/finance.png";
+const defaultImg = "/maths.png";
 
 const Quizzes = () => {
   const [createdQuizzes, setCreatedQuizzes] = useState([]);
@@ -21,12 +22,7 @@ const Quizzes = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await fetch("http://localhost:8000/quizzes", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming 'token' is the key for the JWT token in local storage
-          },
-        });
-        const data = await response.json();
+        const { data } = await api.get("/quizzes");
         setCreatedQuizzes(data);
       } catch (error) {
         console.error("Error fetching quizzes:", error.message);
@@ -41,7 +37,7 @@ const Quizzes = () => {
     setIsModalOpen(true);
   };
 
-  const handlePlayQuiz = (_quizId) => {
+  const handlePlayQuiz = () => {
     setIsPlayModalOpen(true);
   };
 
@@ -54,11 +50,8 @@ const Quizzes = () => {
   const fetchSessionDetails = async (gamePin) => {
     console.log("Fetching session details for game pin:", gamePin); // Log before fetching session details
     try {
-      const response = await fetch(`http://localhost:8000/sessions/${gamePin}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const { data } = await api.get(`/sessions/${gamePin}`);
+      
       const quizId = data.session.hostedQuizId._id;
       console.log("QuizId:", quizId);
       // Navigate to PlayersLandingPage with quizId and gamePin
@@ -88,20 +81,10 @@ const Quizzes = () => {
   // In your Library component
   const handleSave = async (quizId) => {
     try {
-      const response = await fetch("http://localhost:8000/savedQuizzes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming 'token' is the key for the JWT token in local storage
-        },
-        body: JSON.stringify({
-          quizId: quizId,
-        }),
+      const { data } = await api.post("/savedQuizzes", {
+        quizId: quizId,
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+
       console.log("Quiz saved:", data.savedQuiz);
       alert("Quiz Saved Successfully");
     } catch (error) {
@@ -111,10 +94,7 @@ const Quizzes = () => {
 
   const handleDeleteQuiz = async (quizId) => {
     try {
-      const response = await fetch(`http://localhost:8000/quizzes/${quizId}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
+      const { data } = await api.delete(`/quizzes/${quizId}`);
       console.log(data.message);
       setIsDeleteModalOpen(false);
       setIsModalOpen(false);

@@ -78,24 +78,37 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
+    // Generate Access Token (Short-lived ~15 min)
+    const accessToken = jwt.sign(
       {
         id: user._id,
         email: user.email,
         name: user.name,
       },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
     );
 
-    // Send JWT token as part of the response
-    res.cookie("token", token, {
+    // Generate Refresh Token (Long-lived ~7 days)
+    // Using a separate secret if available, else falling back to JWT_SECRET
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_TOKEN_SECRET || process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // Send Refresh Token in a Set-Cookie header
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false, // Set to true if using HTTPS
-      sameSite: "lax",
-    }).json({
+      secure: process.env.NODE_ENV === "production", // true in production
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // Send accessToken in the JSON body
+    res.json({
       user,
-      token,
+      accessToken,
     });
   } catch (error) {
     console.log(error);
@@ -105,8 +118,61 @@ const loginUser = async (req, res) => {
   }
 };
 
+// Refresh Token Endpoint
+const refresh = (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET || process.env.JWT_SECRET,
+    async (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ error: "Token is not valid" });
+      }
+
+      try {
+        const user = await User.findById(decoded.id);
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        const accessToken = jwt.sign(
+          {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: "15m" }
+        );
+
+        res.json({ accessToken, user });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  );
+};
+
+// Logout Endpoint
+const logout = (req, res) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
+  res.json({ message: "Logged out successfully" });
+};
+
 module.exports = {
   test,
   registerUser,
   loginUser,
+  refresh,
+  logout,
 };

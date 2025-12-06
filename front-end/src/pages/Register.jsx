@@ -3,8 +3,8 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import RegisterCSS from "./Register.module.css";
-import Navibar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navibar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 export default function Register() {
   const navigate = useNavigate();

@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Navibar from "./components/layout/Navbar";
 import Navibar2 from "./components/layout/Navibar2";
 import SearchQuizzes from "./components/common/SearchQuizzes";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 // Pages
 import Register from "./pages/Register";
@@ -35,23 +36,25 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/navibar2" element={<Navibar2 />} />
-        <Route path="/quizcreatepage" element={<QuizCreatePage />} />
         <Route path="/help" element={<Help />} />
         <Route path="/maintaince" element={<Maintaince />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/createandplay" element={<CreateAndPlay />} />
-        <Route path="/hostlanding/:quizId/:gamePin" element={<HostLandingPage />}/>
-        <Route path="/playerslanding/:quizId/:gamePin" element={<PlayersLandingPage />}/>
-        <Route path="/playerslanding/:gamePin" element={<PlayersLandingPage />}/>
-        <Route path="/quizpage/:quizId/:gamePin" element={<QuizPage />} />
-        <Route path="/leaderboard/:gamePin" element={<LeaderboardPage />} />
-        <Route path="/library" element={<Library />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/Connect" element={<Connect />} />
-        <Route path="/SearchQuizzes" element={<SearchQuizzes />} />
+        
+        {/* Protected Routes */}
+        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/navibar2" element={<ProtectedRoute><Navibar2 /></ProtectedRoute>} />
+        <Route path="/quizcreatepage" element={<ProtectedRoute><QuizCreatePage /></ProtectedRoute>} />
+        <Route path="/createandplay" element={<ProtectedRoute><CreateAndPlay /></ProtectedRoute>} />
+        <Route path="/hostlanding/:quizId/:gamePin" element={<ProtectedRoute><HostLandingPage /></ProtectedRoute>}/>
+        <Route path="/playerslanding/:quizId/:gamePin" element={<ProtectedRoute><PlayersLandingPage /></ProtectedRoute>}/>
+        <Route path="/playerslanding/:gamePin" element={<ProtectedRoute><PlayersLandingPage /></ProtectedRoute>}/>
+        <Route path="/quizpage/:quizId/:gamePin" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
+        <Route path="/leaderboard/:gamePin" element={<ProtectedRoute><LeaderboardPage /></ProtectedRoute>} />
+        <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+        <Route path="/Connect" element={<ProtectedRoute><Connect /></ProtectedRoute>} />
+        <Route path="/SearchQuizzes" element={<ProtectedRoute><SearchQuizzes /></ProtectedRoute>} />
       </Routes>
     </>
   );

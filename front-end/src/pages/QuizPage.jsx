@@ -1,8 +1,9 @@
 //QuizPage.jsx
 import { useParams, useNavigate } from "react-router-dom";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./QuizPage.css";
 import socket from "./socket";
+import api from "../services/api";
 
 const QuizPage = () => {
   const { quizId, gamePin } = useParams();
@@ -23,13 +24,7 @@ const QuizPage = () => {
   useEffect(() => {
     const fetchSessionDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/sessions/${gamePin}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.get(`/sessions/${gamePin}`);
         console.log("Fetched session data:", data); // Log fetched data
         setSession(data.session);
       } catch (error) {
@@ -43,11 +38,7 @@ const QuizPage = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/quizzes/${quizId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await api.get(`/quizzes/${quizId}`);
         console.log("Fetched quiz data:", data); // Log fetched data
         setQuiz(data);
       } catch (error) {
@@ -67,27 +58,13 @@ const QuizPage = () => {
       console.log("updatePlayerScore called");
       try {
         console.log("Trying to fetch data");
-        const response = await fetch(
-          `http://localhost:8000/sessions/${sessionId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              sessionId,
-              playerId,
-              score,
-            }),
-          }
-        );
+        const { data } = await api.put(`/sessions/${sessionId}`, {
+          sessionId,
+          playerId,
+          score,
+        });
 
         console.log("Fetch completed");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
         console.log("Updated player score:", data);
       } catch (error) {
         console.error("Error updating player score:", error.message);
@@ -178,15 +155,14 @@ const QuizPage = () => {
               {currentQuestion.answers.map((answer, index) => (
                 <div
                   key={index}
-                  className={`answer-box-${index} ${
-                    `Answer${index}` === selectedAnswer
+                  className={`answer-box-${index} ${`Answer${index}` === selectedAnswer
                       ? `Answer${index}` === correctAnswer
                         ? "correct"
                         : "incorrect"
                       : `Answer${index}` === correctAnswer
-                      ? "correct"
-                      : ""
-                  }`}
+                        ? "correct"
+                        : ""
+                    }`}
                   onClick={
                     !isAnswerSelected ? () => handleAnswerClick(index) : null
                   }

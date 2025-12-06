@@ -5,9 +5,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 100px;
+  padding: 20px 40px;
   font-family: "Poppins";
-  background-color: #31304D;
+  background-color: #31304d;
 }
 
 .navibar_align {

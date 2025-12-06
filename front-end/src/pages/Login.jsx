@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService";
+import { UserContext } from "../context/UserContext";
 import LoginCSS from "./Login.module.css";
-import Navibar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navibar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useContext(UserContext);
 
   const [data, setData] = useState({
     email: "",
@@ -18,16 +19,12 @@ export default function Login() {
     e.preventDefault();
     const { email, password } = data;
     try {
-      const responseData = await loginUser({
-        email,
-        password,
-      });
-      if (responseData.error) {
-        toast.error(responseData.error);
+      const result = await login(email, password);
+      if (result.error) {
+        toast.error(result.error);
       } else {
-        // Store token in local storage
-        localStorage.setItem("token", responseData.token);
-        setData({});
+        // Token is now handled by context and cookie
+        setData({ email: "", password: "" });
         navigate("/CreateAndPlay");
         toast.success("🎊Login Successful. Welcome Back!🎈");
       }

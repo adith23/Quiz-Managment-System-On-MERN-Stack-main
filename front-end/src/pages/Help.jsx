@@ -1,5 +1,5 @@
-import Navibar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navibar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import Style from "./Help.module.css";
 
 function Help() {

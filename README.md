@@ -26,7 +26,7 @@ A comprehensive full-stack web application for creating, hosting, and playing in
 
 ## 5. Demo / Screenshots
 
-- ![Quiz Page Overview](front-end/src/assets/quizpage.png)
+![Quiz Page Overview](front-end/src/assets/quizpage.png)
 
 ## 6. Installation
 

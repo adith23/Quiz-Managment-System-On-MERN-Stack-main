@@ -1,6 +1,4 @@
-<<<<<<< ours
-
-# Real-Time Quiz Management System 🚀
+# Real-Time Interactive Quiz Management System 🚀
 
 ## 1. Project Title
 
@@ -28,7 +26,7 @@ A comprehensive full-stack web application for creating, hosting, and playing in
 
 ## 5. Demo / Screenshots
 
-- ![Dashboard Overview](./assets/quizpage.png)
+- ![Quiz Page Overview](.front-end/src/assets/quizpage.png)
 
 ## 6. Installation
 
